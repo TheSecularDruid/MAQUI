@@ -166,5 +166,16 @@ var WebAPI = {
 		$.getJSON("/getRawSequences/", query, function(response) {
 			callback(response);
 		});
+	},
+
+	saveLocalSequences: function (panelID, ForSID, callback) {
+		var query = {
+			panelID: panelID,
+			ForSID: ForSID,
+		};
+
+		$.getJSON("/saveLocalSequences/", query, function (response) {
+			callback(response);
+		});
 	}
 }

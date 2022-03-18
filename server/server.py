@@ -7,6 +7,7 @@ import subprocess
 import atexit
 import os
 import math
+import csv
 
 from globalVariables import *
 import dataLoader
@@ -905,6 +906,35 @@ def getRawSequences():
     }
 
     return jsonify(response)
+
+@app.route("/saveLocalSequences/")
+def saveLocalSequences():
+    panelID = request.args["panelID"]
+    ForSID = request.args["ForSID"]
+    outputType = request.args["outputType"]
+    write = request.args["write"]
+
+    response = FandS[panelID][ForSID]['output'][outputType]
+
+    if write:
+        with open("saved_sequences.csv",'w',newline='') as f:
+            w = csv.writer(f)
+
+            for rep_key,rep_value in response.items():
+                for events in rep_value:  #events are [ str time,[attr1],[attr2]] where attr_n.len is the number of concurrent events
+                    for conq_event_index in range(len(events[1])):
+                        row = []
+                        row.append(rep_key)                  #id
+                        row.append(events[0])                #time
+                        for attr_index in range(1,len(events)):
+                            attr_value = events[attr_index][conq_event_index]
+                            row.append(attr_value)
+                        w.writerow(row)
+        os.chmod("saved_sequences.csv",0o777)
+
+
+    return(jsonify(response))
+
 
 @atexit.register
 def removeIOFiles():
