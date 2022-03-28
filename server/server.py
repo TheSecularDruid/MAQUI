@@ -181,6 +181,8 @@ def removePanel(panelID):
         "minifiedFandS": helper.createMinifiedFandS()
     }
 
+    if int(panelID)==currentContext["Pannel"]:
+        currentContext["UpToDate"] == False
     return jsonify(response)
 
 @app.route("/getAttributeList/<attributeType>/")
@@ -468,6 +470,13 @@ def createSimpleSplittingPoint():
         "minifiedFandS": helper.createMinifiedFandS()
     }
 
+    #update current context
+    global currentContext
+
+    if int(panelIDOfInputSeq)==currentContext["Pannel"]:
+        currentContext["UpToDate"] = False
+        print("updated current context to False in createSimpleSplittingPoint")
+
     return jsonify(response)
 
 @app.route("/createSimpleCategoricalFilter/")
@@ -656,6 +665,10 @@ def createPatternSplittingPoint():
         "minifiedFandS": helper.createMinifiedFandS()
     }
 
+    global currentContext
+    if int(panelIDOfInputSeq)==currentContext["Pannel"]:
+        currentContext["UpToDate"] = False
+
     return jsonify(response)
 
 
@@ -728,6 +741,10 @@ def createMultipleSimpleSplittingPoints(): # cascading add is not required becau
         "minifiedFandS": helper.createMinifiedFandS()
     }
 
+    global currentContext
+    if int(panelIDOfInputSeq)==currentContext["Pannel"]:
+        currentContext["UpToDate"] = False
+
     return jsonify(response)
 
 @app.route("/removeSorF/")
@@ -769,6 +786,10 @@ def removeSorF():
         "removedForSID": ForSIDToBeDeleted,
         "minifiedFandS": helper.createMinifiedFandS()
     }
+
+    global currentContext
+    if int(panelID)==currentContext["Pannel"]:
+        currentContext["UpToDate"] = False
 
     return jsonify(response)
 
@@ -865,6 +886,12 @@ def mineFrequentPattern():
         "frequentPatterns": frequentPatterns
     }
 
+    global currentContext
+    currentContext["Pannel"] = panelID
+    currentContext["Focus"] = ForSID
+    currentContext["Output"] = outputType
+    currentContext["UpToDate"] = True
+
     return jsonify(response)
 
 @app.route("/getRawSequences/")
@@ -935,6 +962,10 @@ def saveLocalSequences():
 
     return(jsonify(response))
 
+@app.route("/getCurrentContext")
+def getCurrentContext():
+    global currentContext
+    return jsonify(currentContext)
 
 @atexit.register
 def removeIOFiles():

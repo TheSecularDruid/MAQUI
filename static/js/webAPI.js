@@ -177,5 +177,15 @@ var WebAPI = {
 		$.getJSON("/saveLocalSequences/", query, function (response) {
 			callback(response);
 		});
+	},
+
+	getCurrentContext: function (callback) {
+		var query = {
+
+		};
+
+		$.getJSON("/getCurrentContext/", query, function (response) {
+			callback(response);
+		});
 	}
 }

@@ -24,3 +24,13 @@ FandS = {}
 #       }
 #    }
 # }
+
+
+
+
+
+currentContext = {
+    'Pannel': 0,
+    'Focus': 0,
+    'Output': 'after',
+    'UpToDate':True}
